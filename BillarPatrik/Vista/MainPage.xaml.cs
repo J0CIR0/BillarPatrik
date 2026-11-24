@@ -189,14 +189,18 @@ namespace BillarPatrik.Vista
 
             if (modalidad == "TIEMPO FIJO")
             {
-                string horasStr = await DisplayPromptAsync("Tiempo Fijo", "Ingrese las HORAS:", "OK", "Cancelar", "0", keyboard: Keyboard.Numeric);
-                if (!int.TryParse(horasStr, out int horas) || horas < 0) return;
+                int? horas = await SolicitarNumeroEnteroAsync("Tiempo Fijo", "Ingrese las HORAS:");
+                if (!horas.HasValue) return;
 
-                string minutosStr = await DisplayPromptAsync("Tiempo Fijo", "Ingrese los MINUTOS:", "OK", "Cancelar", "0", keyboard: Keyboard.Numeric);
-                if (!int.TryParse(minutosStr, out int minutos) || minutos < 0) return;
+                int? minutos = await SolicitarNumeroEnteroAsync("Tiempo Fijo", "Ingrese los MINUTOS:");
+                if (!minutos.HasValue) return;
 
-                int totalMinutos = (horas * 60) + minutos;
-                if (totalMinutos <= 0) return;
+                int totalMinutos = (horas.Value * 60) + minutos.Value;
+                if (totalMinutos <= 0)
+                {
+                    await DisplayAlert("Dato inválido", "Debe ingresar al menos un minuto.", "OK");
+                    return;
+                }
                 mesa.MinutosFijos = totalMinutos;
             }
 
@@ -209,6 +213,20 @@ namespace BillarPatrik.Vista
             await _db.ActualizarMesa(mesa);
             await CargarDatos();
             MostrarDetalleMesa(mesa);
+        }
+
+        private async Task<int?> SolicitarNumeroEnteroAsync(string titulo, string mensaje)
+        {
+            while (true)
+            {
+                string valor = await DisplayPromptAsync(titulo, mensaje, "OK", "Cancelar", "0", keyboard: Keyboard.Numeric);
+                if (valor == null) return null;
+
+                if (int.TryParse(valor.Trim(), out int numero) && numero >= 0)
+                    return numero;
+
+                await DisplayAlert("Dato inválido", "Solo puede ingresar números enteros mayores o iguales a cero.", "OK");
+            }
         }
 
         private async void AgregarConsumoDetalle(object sender, EventArgs e)
