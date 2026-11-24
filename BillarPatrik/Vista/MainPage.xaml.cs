@@ -238,20 +238,16 @@ namespace BillarPatrik.Vista
             }
 
             var productos = await _db.ObtenerProductos();
-            var nombres = productos.Select(p => $"{p.Nombre} - {p.Precio:0.00} Bs").ToArray();
 
-            string seleccion = await DisplayActionSheet("Seleccione un producto", "Cancelar", null, nombres);
-            if (seleccion == "Cancelar" || seleccion == null) return;
+            var menuConsumo = new MenuConsumoPage(productos, async productoSeleccionado =>
+            {
+                _mesaSeleccionada.ConsumoTotal += productoSeleccionado.Precio;
+                await _db.ActualizarMesa(_mesaSeleccionada);
+                await CargarDatos();
+                MostrarDetalleMesa(_mesaSeleccionada);
+            });
 
-            var productoSeleccionado = productos.FirstOrDefault(p => seleccion.StartsWith(p.Nombre));
-            if (productoSeleccionado == null) return;
-
-            _mesaSeleccionada.ConsumoTotal += productoSeleccionado.Precio;
-            await _db.ActualizarMesa(_mesaSeleccionada);
-
-            await DisplayAlert("Consumo", $"Se agregó {productoSeleccionado.Nombre}. Consumo total: {_mesaSeleccionada.ConsumoTotal:0.00} Bs.", "OK");
-            await CargarDatos();
-            MostrarDetalleMesa(_mesaSeleccionada);
+            await Navigation.PushModalAsync(menuConsumo);
         }
 
         private async void CobrarMesaDetalle(object sender, EventArgs e)
