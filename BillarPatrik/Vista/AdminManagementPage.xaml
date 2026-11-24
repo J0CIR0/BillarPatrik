@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BillarPatrik.Vista.AdminManagementPage"
+             BackgroundColor="#0A0A0A"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <Image Source="fondo_admin.png"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+        <Grid RowDefinitions="Auto,Auto,*" Padding="20" RowSpacing="12">
+        <Border StrokeThickness="0" StrokeShape="RoundRectangle 18"
+                BackgroundColor="#1A1A1A" Padding="18,14">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <Button Text="‹" Clicked="Volver" WidthRequest="44" HeightRequest="44"
+                        CornerRadius="12" BackgroundColor="#1B4D3E"
+                        TextColor="#F5F5F5" FontSize="24" FontAttributes="Bold" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                    <Label x:Name="lblTitulo" Text="Administración" TextColor="White"
+                           FontSize="18" FontAttributes="Bold" />
+                    <Label x:Name="lblSubtitulo" Text="Gestion administrativa"
+                           TextColor="#BCC7D9" FontSize="12" />
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="2" Spacing="8">
+                    <Button x:Name="btnExportar" Text="EXPORTAR PDF" Clicked="ExportarPdfGeneral"
+                            IsVisible="False" BackgroundColor="#1E2A22" TextColor="#F5F5F5"
+                            FontAttributes="Bold" CornerRadius="11" HeightRequest="44" />
+                    <Button x:Name="btnAgregar" Text="+ AGREGAR" Clicked="Agregar"
+                            BackgroundColor="{StaticResource BrandGold}" TextColor="{StaticResource BrandNavy}"
+                            FontAttributes="Bold" CornerRadius="11" HeightRequest="44" />
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+            <HorizontalStackLayout Spacing="8">
+                <Button Text="Mesas" Clicked="CambiarMesas" Style="{x:Null}"
+                        x:Name="btnMesas" HeightRequest="42" CornerRadius="10"
+                        BackgroundColor="{StaticResource BrandBlue}" TextColor="White" FontAttributes="Bold" />
+                <Button Text="Tipos" Clicked="CambiarTipos" x:Name="btnTipos"
+                        HeightRequest="42" CornerRadius="10" BackgroundColor="#1A1A1A" BorderColor="#333333" BorderWidth="1"
+                        TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
+                <Button Text="Trabajadores" Clicked="CambiarTrabajadores" x:Name="btnTrabajadores"
+                        HeightRequest="42" CornerRadius="10" BackgroundColor="#1A1A1A" BorderColor="#333333" BorderWidth="1"
+                        TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
+                <Button Text="Categorías" Clicked="CambiarCategorias" x:Name="btnCategorias"
+                        HeightRequest="42" CornerRadius="10" BackgroundColor="#1A1A1A" BorderColor="#333333" BorderWidth="1"
+                        TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
+                <Button Text="Productos" Clicked="CambiarProductos" x:Name="btnProductos"
+                        HeightRequest="42" CornerRadius="10" BackgroundColor="#1A1A1A" BorderColor="#333333" BorderWidth="1"
+                        TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
+                <Button Text="Registros de caja" Clicked="CambiarCaja" x:Name="btnCaja"
+                        HeightRequest="42" CornerRadius="10" BackgroundColor="#1A1A1A" BorderColor="#333333" BorderWidth="1"
+                        TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
+                <Button Text="Contabilidad" Clicked="CambiarContabilidad" x:Name="btnContabilidad"
+                        HeightRequest="42" CornerRadius="10" BackgroundColor="#1A1A1A" BorderColor="#333333" BorderWidth="1"
+                        TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
+                <Button Text="Auditoría" Clicked="CambiarAuditoria" x:Name="btnAuditoria"
+                        HeightRequest="42" CornerRadius="10" BackgroundColor="#1A1A1A" BorderColor="#333333" BorderWidth="1"
+                        TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="2" RowDefinitions="Auto,*" RowSpacing="10">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Border Stroke="#333333" StrokeThickness="1" StrokeShape="RoundRectangle 12"
+                        BackgroundColor="#1A1A1A" Padding="12,2">
+                    <Entry x:Name="txtBuscar" Placeholder="Buscar..." TextChanged="BuscarTexto"
+                           TextColor="#F5F5F5" PlaceholderColor="#A0A0A0" BackgroundColor="Transparent"
+                           HeightRequest="44" />
+                </Border>
+                <Button Grid.Column="1" x:Name="btnFiltro" Text="TODOS" Clicked="CambiarFiltro"
+                        BackgroundColor="#1A1A1A" TextColor="#F5F5F5"
+                        BorderColor="#333333" BorderWidth="1" CornerRadius="12" HeightRequest="44" />
+            </Grid>
+
+            <Border Grid.Row="1" Stroke="#333333" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 18" BackgroundColor="#1A1A1A" Padding="10">
+                <CollectionView x:Name="cvDatos" SelectionMode="Single"
+                                SelectionChanged="SeleccionarRegistro">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout Padding="30" Spacing="8" VerticalOptions="Center">
+                            <Label Text="SIN RESULTADOS" FontAttributes="Bold" FontSize="13"
+                                   TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" />
+                            <Label Text="Agrega un registro o cambia los filtros"
+                                   FontSize="12" TextColor="{StaticResource TextSecondary}"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,8" Padding="14" Stroke="#333333" StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 12" BackgroundColor="#0A0A0A">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                    <Border WidthRequest="52" HeightRequest="52" StrokeThickness="0"
+                                            IsVisible="{Binding TieneImagen}"
+                                            StrokeShape="RoundRectangle 12"                                             BackgroundColor="#1E2A22">
+                                        <Image Source="{Binding Imagen}" Aspect="AspectFill" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                        <Label Text="{Binding Titulo}" FontSize="15" FontAttributes="Bold"
+                                               TextColor="#F5F5F5" />
+                                        <Label Text="{Binding Subtitulo}" FontSize="12"
+                                               TextColor="#A0A0A0" />
+                                    </VerticalStackLayout>
+                                    <Border Grid.Column="2" StrokeThickness="0" StrokeShape="RoundRectangle 9"
+                                            BackgroundColor="{Binding FondoEstado}" Padding="9,6"
+                                            VerticalOptions="Center">
+                                        <Label Text="{Binding Estado}" FontSize="9" FontAttributes="Bold"
+                                               TextColor="{Binding ColorEstado}" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+        </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>

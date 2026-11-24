@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BillarPatrik.Vista.AdminPage"
+             BackgroundColor="#0A0A0A"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <Image Source="fondo_admin.png"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+        <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="16">
+        <Border Grid.Row="0" StrokeThickness="0" StrokeShape="RoundRectangle 18"
+                BackgroundColor="#1A1A1A" Padding="20,16">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                <Border WidthRequest="48" HeightRequest="48" StrokeThickness="0"
+                        StrokeShape="RoundRectangle 24" BackgroundColor="#1B4D3E">
+                    <Label Text="BP" TextColor="#F5F5F5" FontAttributes="Bold"
+                           FontSize="16" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                </Border>
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                    <Label Text="Billar Patrik" TextColor="#F5F5F5" FontSize="18" FontAttributes="Bold" />
+                    <Label x:Name="lblBienvenida" Text="Panel de administración" TextColor="#A0A0A0" FontSize="13" />
+                </VerticalStackLayout>
+                <Button Grid.Column="2" Text="Cerrar sesión" Clicked="CerrarSesion"
+                        BackgroundColor="#8B0000" TextColor="#F5F5F5"
+                        FontAttributes="Bold" CornerRadius="10" HeightRequest="44" />
+            </Grid>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="12" MaximumWidthRequest="1000" HorizontalOptions="Fill">
+                <Label Text="NAVEGACIÓN" TextColor="#A0A0A0"
+                       FontSize="12" FontAttributes="Bold" Margin="2,2,2,4" />
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto"
+                      ColumnSpacing="12" RowSpacing="12">
+                    <Button Grid.Row="0" Grid.Column="0" Text="MESAS" Clicked="AbrirMesas"
+                            HeightRequest="86" CornerRadius="16" FontSize="16" FontAttributes="Bold"
+                            BackgroundColor="#0D2B1F" TextColor="#F5F5F5"
+                            BorderColor="#1B4D3E" BorderWidth="1" />
+                    <Button Grid.Row="0" Grid.Column="1" Text="TRABAJADORES" Clicked="AbrirTrabajadores"
+                            HeightRequest="86" CornerRadius="16" FontSize="16" FontAttributes="Bold"
+                            BackgroundColor="#1A1A1A" TextColor="#F5F5F5"
+                            BorderColor="#333333" BorderWidth="1" />
+                    <Button Grid.Row="1" Grid.Column="0" Text="PRODUCTOS" Clicked="AbrirProductos"
+                            HeightRequest="86" CornerRadius="16" FontSize="16" FontAttributes="Bold"
+                            BackgroundColor="#1A1A1A" TextColor="#F5F5F5"
+                            BorderColor="#333333" BorderWidth="1" />
+                    <Button Grid.Row="1" Grid.Column="1" Text="CAJA" Clicked="AbrirCaja"
+                            HeightRequest="86" CornerRadius="16" FontSize="16" FontAttributes="Bold"
+                            BackgroundColor="#1A1A1A" TextColor="#F5F5F5"
+                            BorderColor="#333333" BorderWidth="1" />
+                    <Button Grid.Row="2" Grid.Column="0" Text="CONTABILIDAD" Clicked="AbrirContabilidad"
+                            HeightRequest="86" CornerRadius="16" FontSize="16" FontAttributes="Bold"
+                            BackgroundColor="#1A1A1A" TextColor="#F5F5F5"
+                            BorderColor="#333333" BorderWidth="1" />
+                    <Button Grid.Row="2" Grid.Column="1" Text="AUDITORÍA" Clicked="AbrirAuditoria"
+                            HeightRequest="86" CornerRadius="16" FontSize="16" FontAttributes="Bold"
+                            BackgroundColor="#1A1A1A" TextColor="#F5F5F5"
+                            BorderColor="#333333" BorderWidth="1" />
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

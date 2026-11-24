@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BillarPatrik.Vista"
+             x:Class="BillarPatrik.Vista.MainPage"
+             BackgroundColor="#0A0A0A"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:BoolToEstadoConverter x:Key="BoolToEstadoConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Image Source="fondo_recaudacion.png"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+        <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="16">
+        <Border Grid.Row="0" StrokeThickness="0" StrokeShape="RoundRectangle 18"
+                BackgroundColor="#1A1A1A" Padding="18,14">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <Border WidthRequest="46" HeightRequest="46" StrokeThickness="0"
+                        StrokeShape="RoundRectangle 23" BackgroundColor="{StaticResource BrandGold}">
+                    <Label Text="BP" TextColor="{StaticResource BrandNavy}" FontAttributes="Bold"
+                           FontSize="15" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                </Border>
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                    <Label Text="MESAS EN OPERACIÓN" TextColor="#F5F5F5" FontSize="16" FontAttributes="Bold" />
+                    <Label x:Name="lblTrabajador" Text="Trabajador" TextColor="#A0A0A0" FontSize="12" />
+                    <Label x:Name="lblEstadoConexion" Text="Servidor: verificando..." TextColor="#A0A0A0" FontSize="11" />
+                </VerticalStackLayout>
+                <Grid Grid.Column="2" ColumnDefinitions="Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                    <Border StrokeThickness="0" StrokeShape="RoundRectangle 12"
+                            BackgroundColor="#1E2A22" Padding="12,8">
+                        <VerticalStackLayout Spacing="1">
+                            <Label Text="RECAUDACIÓN" TextColor="#A0A0A0" FontSize="9"
+                                   FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <Label x:Name="lblRecaudacion" Text="0.00 Bs"
+                                   FontSize="16" FontAttributes="Bold" TextColor="#35C985" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Button Grid.Column="1" Text="⋮" Clicked="AbrirMenuCuenta"
+                            WidthRequest="44" HeightRequest="44" CornerRadius="12"
+                            BackgroundColor="#1B4D3E" TextColor="#F5F5F5"
+                            FontAttributes="Bold" FontSize="18" />
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Padding="4" SizeChanged="MesasAreaSizeChanged">
+            <Grid RowDefinitions="Auto,*" RowSpacing="12">
+                <Grid ColumnDefinitions="*,Auto" Padding="4,2">
+                    <VerticalStackLayout>
+                        <Label Text="Mesas" TextColor="#F5F5F5"
+                               FontSize="20" FontAttributes="Bold" />
+                        <Label Text="Seleccione una mesa para ver sus detalles" 
+                               TextColor="{StaticResource TextSecondary}" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto" ColumnSpacing="6">
+                        <Border StrokeThickness="0" StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{StaticResource SuccessSoft}" Padding="10,7">
+                            <Label x:Name="lblMesasOcupadas" Text="0 ocupadas"
+                                   TextColor="{StaticResource Success}" FontSize="10" FontAttributes="Bold" />
+                        </Border>
+                        <Border Grid.Column="1" StrokeThickness="0" StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{StaticResource Surface}" Padding="10,7">
+                            <Label x:Name="lblMesasLibres" Text="0 libres"
+                                   TextColor="{StaticResource TextSecondary}" FontSize="10" FontAttributes="Bold" />
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <CollectionView x:Name="cvMesas" Grid.Row="1" SelectionMode="Single"
+                                SelectionChanged="SeleccionarMesa">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout x:Name="mesasLayout" Orientation="Vertical" Span="2"
+                                         HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HeightRequest="164">
+                                    <Image Source="mesa_libre.png"
+                                           IsVisible="{Binding MostrarMesaLibre}"
+                                           Aspect="AspectFill"
+                                           HorizontalOptions="Fill"
+                                           VerticalOptions="Fill" />
+                                    <Image Source="mesa_ocupada.png"
+                                           IsVisible="{Binding MostrarMesaOcupada}"
+                                           Aspect="AspectFill"
+                                           HorizontalOptions="Fill"
+                                           VerticalOptions="Fill" />
+                                    <Label Text="{Binding Ocupada, Converter={StaticResource BoolToEstadoConverter}}"
+                                           VerticalOptions="Start" HorizontalOptions="End"
+                                           Margin="10" TextColor="White" FontSize="10" FontAttributes="Bold"
+                                           BackgroundColor="{Binding BordeMesa}" Padding="9,6" />
+                                    <VerticalStackLayout Padding="12,8" VerticalOptions="End" Spacing="3">
+                                        <Label Text="{Binding NumeroMesa, StringFormat='MESA {0}'}"
+                                               FontSize="18" FontAttributes="Bold" TextColor="White"
+                                               HorizontalTextAlignment="Center" />
+                                        <Label Text="{Binding TiempoTranscurrido}"
+                                               FontSize="12" TextColor="#F3F6FA"
+                                               HorizontalTextAlignment="Center" />
+                                        <Label Text="VER DETALLE" TextColor="#DDE9E3"
+                                               FontSize="9" FontAttributes="Bold"
+                                               HorizontalTextAlignment="Center" Margin="0,2,0,0" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="modalOverlay" Grid.RowSpan="2"
+IsVisible="False"
+              BackgroundColor="#CC000000" Padding="20" ZIndex="100">
+            <Border StrokeThickness="0" StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#1A1A1A" MaximumWidthRequest="620"
+                    HorizontalOptions="Fill" VerticalOptions="Center" Padding="0">
+                <Grid RowDefinitions="Auto,*,Auto" MaximumHeightRequest="720">
+                    <Grid Padding="20,16" ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="Detalle de mesa" TextColor="#F5F5F5"
+                                   FontSize="20" FontAttributes="Bold" />
+                            <Label x:Name="lblModalMesa" Text="Mesa"
+                                   TextColor="#A0A0A0" FontSize="13" />
+                        </VerticalStackLayout>
+                        <Border Grid.Column="1" x:Name="badgeModalMesa"
+                                StrokeThickness="0" StrokeShape="RoundRectangle 10"
+                                BackgroundColor="{StaticResource SuccessSoft}" Padding="11,7">
+                            <Label x:Name="lblEstadoModal" Text="OCUPADA"
+                                   TextColor="{StaticResource Success}" FontSize="10" FontAttributes="Bold" />
+                        </Border>
+                    </Grid>
+
+                    <Grid x:Name="consumoOverlay" Grid.RowSpan="2" IsVisible="False"
+                          BackgroundColor="#CC000000" Padding="20" ZIndex="110">
+                        <Border StrokeThickness="0" StrokeShape="RoundRectangle 20"
+                                BackgroundColor="#1A1A1A" MaximumWidthRequest="760"
+                                HorizontalOptions="Fill" VerticalOptions="Center" Padding="18">
+                            <Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="Agregar consumo" TextColor="#F5F5F5"
+                                               FontSize="20" FontAttributes="Bold" />
+                                        <Label Text="Seleccione una categoría y luego un producto"
+                                               TextColor="#A0A0A0" FontSize="12" />
+                                    </VerticalStackLayout>
+                                    <Button Grid.Column="1" Text="×" Clicked="CerrarSelectorConsumo"
+                                            WidthRequest="44" HeightRequest="44" CornerRadius="12"
+                                            BackgroundColor="#1E2A22" TextColor="#F5F5F5" FontSize="20" />
+                                </Grid>
+
+                                <CollectionView x:Name="cvCategoriasConsumo" Grid.Row="1"
+                                                HeightRequest="48" SelectionMode="Single"
+                                                SelectionChanged="CategoriaConsumoSeleccionada">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="14,10" Stroke="#333333" StrokeThickness="1"
+                                                    StrokeShape="RoundRectangle 10" BackgroundColor="#0A0A0A">
+                                                <Label Text="{Binding}" TextColor="#F5F5F5"
+                                                       FontAttributes="Bold" FontSize="12" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                                <CollectionView x:Name="cvProductosConsumo" Grid.Row="2"
+                                                HeightRequest="230" SelectionMode="Single"
+                                                SelectionChanged="ProductoConsumoSeleccionado">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="12" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border WidthRequest="180" Padding="10" Stroke="#333333"
+                                                    StrokeThickness="1" StrokeShape="RoundRectangle 14"
+                                                    BackgroundColor="#0A0A0A">
+                                                <Grid RowDefinitions="120,Auto,Auto" RowSpacing="6">
+                                                    <Image Grid.Row="0" Source="{Binding Imagen}" Aspect="AspectFill"
+                                                           HeightRequest="120" />
+                                                    <Label Grid.Row="1" Text="{Binding Nombre}" TextColor="#F5F5F5"
+                                                           FontAttributes="Bold" FontSize="14"
+                                                           LineBreakMode="TailTruncation" />
+                                                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+                                                        <Label Text="{Binding Stock}" TextColor="#A0A0A0" FontSize="11" />
+                                                        <Label Grid.Column="1" Text="{Binding Precio}" TextColor="#35C985"
+                                                               FontAttributes="Bold" FontSize="13" />
+                                                    </Grid>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                                <Button Grid.Row="3" Text="CERRAR" Clicked="CerrarSelectorConsumo"
+                                        BackgroundColor="#1A1A1A" TextColor="#F5F5F5"
+                                        BorderColor="#333333" BorderWidth="1"
+                                        FontAttributes="Bold" CornerRadius="10" HeightRequest="44" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+
+                    <ScrollView Grid.Row="1" Padding="20,4,20,16">
+                        <VerticalStackLayout Spacing="12">
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <Border Stroke="#333333" StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 12" BackgroundColor="#0A0A0A" Padding="14">
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="CLIENTE" FontSize="9" FontAttributes="Bold"
+                                               TextColor="#A0A0A0" />
+                                        <Label x:Name="lblClienteModal" Text="Sin cliente" FontSize="15"
+                                               FontAttributes="Bold" TextColor="#F5F5F5" />
+                                    </VerticalStackLayout>
+                                </Border>
+                                <Border Grid.Column="1" Stroke="#333333" StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 12" BackgroundColor="#0A0A0A" Padding="14">
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="TIEMPO" FontSize="9" FontAttributes="Bold"
+                                               TextColor="#A0A0A0" />
+                                        <Label x:Name="lblTiempoModal" Text="--:--:--" FontSize="15"
+                                               FontAttributes="Bold" TextColor="#35C985" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </Grid>
+                            <Border Stroke="#333333" StrokeThickness="1" StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="#0A0A0A" Padding="14">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="Consumo acumulado" TextColor="#F5F5F5"
+                                           FontAttributes="Bold" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" x:Name="lblConsumoModal"
+                                           Text="0.00 Bs" TextColor="#35C985"
+                                           FontSize="16" FontAttributes="Bold" />
+                                </Grid>
+                            </Border>
+                            <Border Stroke="#333333" StrokeThickness="1" StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="#0A0A0A" Padding="14">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="COBRO ACTUAL DE MESA" FontSize="9" FontAttributes="Bold"
+                                               TextColor="#A0A0A0" />
+                                        <Label x:Name="lblSeccionTiempo" Text="Sección: 30 minutos"
+                                               FontSize="11" TextColor="#F5F5F5" />
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1" x:Name="lblCobroMesaModal"
+                                           Text="0.00 Bs" TextColor="#35C985"
+                                           FontSize="18" FontAttributes="Bold" />
+                                </Grid>
+                            </Border>
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Consumo detallado" FontAttributes="Bold"
+                                       TextColor="#F5F5F5" FontSize="13" />
+                                <CollectionView x:Name="cvConsumosModal" HeightRequest="150">
+                                    <CollectionView.EmptyView>
+                                        <Label Text="Sin productos consumidos"
+                                               TextColor="#A0A0A0" FontSize="12"
+                                               HorizontalTextAlignment="Center" Padding="14" />
+                                    </CollectionView.EmptyView>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="0,0,0,6" Padding="10" Stroke="#333333"
+                                                    StrokeThickness="1" StrokeShape="RoundRectangle 10"
+                                                    BackgroundColor="#1A1A1A">
+                                                <Grid ColumnDefinitions="44,*,Auto" ColumnSpacing="10">
+                                                    <Border WidthRequest="44" HeightRequest="44" StrokeThickness="0"
+                                                            StrokeShape="RoundRectangle 8" BackgroundColor="#1E2A22">
+                                                        <Image Source="{Binding Imagen}" Aspect="AspectFill" />
+                                                    </Border>
+                                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                                        <Label Text="{Binding Nombre}" TextColor="#F5F5F5"
+                                                               FontSize="13" FontAttributes="Bold" />
+                                                        <Label Text="{Binding Detalle}" TextColor="#A0A0A0"
+                                                               FontSize="11" />
+                                                    </VerticalStackLayout>
+                                                    <Label Grid.Column="2" Text="{Binding Subtotal}"
+                                                           TextColor="#35C985" FontSize="13"
+                                                           FontAttributes="Bold" VerticalOptions="Center" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </ScrollView>
+
+                    <Grid Grid.Row="2" Padding="20,14" RowDefinitions="Auto,Auto" RowSpacing="10"
+                          ColumnSpacing="10" BackgroundColor="#0A0A0A">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Grid.Column="0" x:Name="btnIniciarModal" Text="INICIAR MESA"
+                                    Clicked="IniciarMesaDesdeModal" IsVisible="False"
+                                    BackgroundColor="#0D2B1F" TextColor="#F5F5F5" BorderColor="#1B4D3E" BorderWidth="1"
+                                    FontAttributes="Bold" CornerRadius="10" HeightRequest="48" />
+                            <Button Grid.Column="0" x:Name="btnAgregarModal" Text="AGREGAR CONSUMO"
+                                    Clicked="AgregarConsumoDetalle" IsVisible="False"
+                                    BackgroundColor="#0D2B1F" TextColor="#F5F5F5" BorderColor="#1B4D3E" BorderWidth="1"
+                                    FontAttributes="Bold" CornerRadius="10" HeightRequest="48" />
+                            <Button Grid.Column="1" x:Name="btnCobrarModal" Text="COBRAR MESA"
+                                    Clicked="CobrarMesaDetalle" IsVisible="False"
+                                    BackgroundColor="#8B0000" TextColor="#F5F5F5"
+                                    FontAttributes="Bold" CornerRadius="10" HeightRequest="48" />
+                        </Grid>
+                        <Button Grid.Row="1" Text="CERRAR" Clicked="CerrarModal"
+                                BackgroundColor="#0A0A0A" TextColor="{StaticResource TextPrimary}"
+                                FontAttributes="Bold" CornerRadius="10" HeightRequest="44" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>

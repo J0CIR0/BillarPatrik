@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BillarPatrik.Vista.LoginPage"
+             BackgroundColor="#0A0A0A"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <Image Source="fondo_login.png"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+
+        <ScrollView HorizontalOptions="Fill" VerticalOptions="Fill">
+            <Grid Padding="24" HorizontalOptions="Fill" VerticalOptions="Center">
+                <VerticalStackLayout x:Name="LoginCard"
+                                     MaximumWidthRequest="430"
+                                     HorizontalOptions="Fill"
+                                     Spacing="14">
+                    <Image Source="logo.png"
+                           HeightRequest="110"
+                           WidthRequest="110"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center" />
+
+                    <VerticalStackLayout Spacing="4" Margin="0,2,0,10">
+                        <Label Text="BILLAR PATRIK" FontSize="26" FontAttributes="Bold"
+                               TextColor="#F5F5F5" HorizontalTextAlignment="Center" />
+                        <Label Text="Sistema de gestión" FontSize="14" TextColor="#D5DDD8"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+
+                    <Entry x:Name="txtUsuario"
+                           Placeholder="Nombre de usuario"
+                           TextColor="#F5F5F5"
+                           PlaceholderColor="#D5DDD8"
+                           BackgroundColor="#B31A1A1A"
+                           MinimumHeightRequest="52"
+                           Margin="0,2" />
+
+                    <Entry x:Name="txtContrasena"
+                           Placeholder="Contraseña"
+                           IsPassword="True"
+                           TextColor="#F5F5F5"
+                           PlaceholderColor="#D5DDD8"
+                           BackgroundColor="#B31A1A1A"
+                           MinimumHeightRequest="52"
+                           Margin="0,2" />
+
+                    <Border x:Name="ErrorBorder" IsVisible="False" Stroke="#8B0000" StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10" BackgroundColor="#D93A1717" Padding="12,8">
+                        <Label x:Name="lblError" TextColor="#FF4C4C" FontSize="13"
+                               HorizontalTextAlignment="Center" />
+                    </Border>
+
+                    <Button x:Name="btnIngresar" Text="INICIAR SESIÓN" Clicked="Ingresar"
+                            BackgroundColor="#0D2B1F"
+                            TextColor="#F5F5F5" FontAttributes="Bold" FontSize="14"
+                            CornerRadius="12" HeightRequest="52" Margin="0,8,0,0" />
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>
